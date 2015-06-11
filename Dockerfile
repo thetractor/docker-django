@@ -79,10 +79,13 @@ VOLUME ${MEDIADIR}
 VOLUME ${STATICDIR}
 VOLUME ${LOGDIR}
 
-# expose ports
+# expose supervisor-stats port
 EXPOSE 9001
-EXPOSE 9090
-EXPOSE 9191
+
+# expose uwsgi-status port
+EXPOSE 7777
+
+# expose web port
 EXPOSE ${PORT}
 
 CMD supervisord
