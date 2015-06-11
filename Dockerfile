@@ -5,13 +5,13 @@ FROM python:3.4
 MAINTAINER Dirk Moors
 
 ENV CONFDIR /tmp/conf
-ENV SCRIPTSDIR /tmp/scripts
 
 ENV APPDIR /opt/python/app
 ENV MEDIADIR /opt/python/media
 ENV STATICDIR /opt/python/static
 ENV LOGDIR /opt/python/logs
 ENV RUNDIR /opt/python/run
+ENV SCRIPTSDIR /opt/python/scripts
 
 ENV SERVER_NAME example.com
 ENV PORT 8080
@@ -45,6 +45,7 @@ RUN mkdir -p ${APPDIR} && \
     mkdir -p ${MEDIADIR} && \
     mkdir -p ${STATICDIR} && \
     mkdir -p ${LOGDIR} && \
+    mkdir -p ${SCRIPTSDIR} && \
     mkdir -p ${RUNDIR}
 
 # make virtualenv
@@ -56,6 +57,7 @@ RUN chown -R www-data ${APPDIR} && \
     chown -R www-data ${MEDIADIR} && \
     chown -R www-data ${STATICDIR} && \
     chown -R www-data ${LOGDIR} && \
+    chown -R www-data ${SCRIPTSDIR} && \
     chown -R www-data ${RUNDIR}
 
 # add files
@@ -65,13 +67,6 @@ ADD ./scripts ${SCRIPTSDIR}
 
 # install requirements
 RUN . ${RUNDIR}/venv/bin/activate && pip install -r ${DJANGO_REQUIREMENTS_FILE}
-
-# make configuration files
-RUN ${SCRIPTSDIR}/make_configurations.sh
-
-# restart services
-#RUN service nginx restart
-#RUN service uwsgi restart
 
 # expose volumes
 VOLUME ${APPDIR}
@@ -88,4 +83,4 @@ EXPOSE 7777
 # expose web port
 EXPOSE ${PORT}
 
-CMD supervisord
+CMD ${SCRIPTSDIR}/run.sh
