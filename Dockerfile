@@ -51,7 +51,6 @@ RUN set -x \
 	&& requiredPipPackages=' \
 	    uwsgi \
         Jinja2 \
-        virtualenv \
 	' \
 	&& apt-get update \
 	&& apt-get install -y $buildDeps $requiredAptPackages --no-install-recommends \
@@ -74,10 +73,6 @@ RUN mkdir -p ${APPDIR} && \
     mkdir -p ${SCRIPTSDIR} && \
     mkdir -p ${RUNDIR}
 
-# make virtualenv
-RUN cd ${RUNDIR} && \
-    virtualenv venv
-
 # set correct permissions
 RUN chown -R www-data ${ROOT}
 
@@ -85,7 +80,7 @@ RUN chown -R www-data ${ROOT}
 ADD ${CONFSRC} ${CONFDIR}
 ADD ${SCRIPTSSRC} ${SCRIPTSDIR}
 
-# add app files
+# add app files, only on build
 ONBUILD ADD ${APPSRC} ${APPDIR}
 ONBUILD ADD ${DEPLOYMENTSRC} ${DEPLOYMENTDIR}
 
