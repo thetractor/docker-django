@@ -4,6 +4,8 @@
 FROM python:3.4
 MAINTAINER Dirk Moors
 
+ENV PYTHONUNBUFFERED 1
+
 ENV CONFDIR /tmp/conf
 
 ENV HOME /opt/python
