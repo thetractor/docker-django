@@ -11,10 +11,12 @@ ENV CONFDIR /tmp/conf
 ENV HOME /opt/python
 
 ENV APPSRC ./app
+ENV DEPLOYMENTSRC ./deployment
 ENV CONFSRC ./conf
 ENV SCRIPTSSRC ./scripts
 
 ENV APPDIR ${HOME}/app
+ENV DEPLOYMENTDIR ${HOME}/deployment
 ENV MEDIADIR ${HOME}/media
 ENV STATICDIR ${HOME}/static
 ENV LOGDIR ${HOME}/logs
@@ -24,7 +26,7 @@ ENV SCRIPTSDIR ${HOME}/scripts
 ENV SERVER_NAME example.com
 ENV PORT 8080
 
-ENV DJANGO_REQUIREMENTS_FILE ${APPDIR}/requirements.txt
+ENV DJANGO_REQUIREMENTS_FILE ${DEPLOYMENTDIR}/requirements-production.txt
 ENV DJANGO_SETTINGS_MODULE service.settings
 
 # install apt packages
@@ -49,8 +51,8 @@ RUN pip install --upgrade pip && \
     pip install virtualenv
 
 # make directories
-ONBUILD RUN \
-    mkdir -p ${APPDIR} && \
+RUN mkdir -p ${APPDIR} && \
+    mkdir -p ${DEPLOYMENTDIR} && \
     mkdir -p ${MEDIADIR} && \
     mkdir -p ${STATICDIR} && \
     mkdir -p ${LOGDIR} && \
@@ -58,33 +60,36 @@ ONBUILD RUN \
     mkdir -p ${RUNDIR}
 
 # make virtualenv
-ONBUILD RUN cd ${RUNDIR} && \
+RUN cd ${RUNDIR} && \
     virtualenv venv
 
 # set correct permissions
-ONBUILD RUN chown -R www-data ${HOME}
+RUN chown -R www-data ${HOME}
 
 # add default files
+ADD ${CONFSRC} ${CONFDIR}
+ADD ${SCRIPTSSRC} ${SCRIPTSDIR}
+
+# add app files
 ONBUILD ADD ${APPSRC} ${APPDIR}
-ONBUILD ADD ${CONFSRC} ${CONFDIR}
-ONBUILD ADD ${SCRIPTSSRC} ${SCRIPTSDIR}
+ONBUILD ADD ${DEPLOYMENTSRC} ${DEPLOYMENTDIR}
 
 # install requirements
 ONBUILD RUN . ${RUNDIR}/venv/bin/activate && pip install -r ${DJANGO_REQUIREMENTS_FILE}
 
 # expose volumes
-ONBUILD VOLUME ${APPDIR}
-ONBUILD VOLUME ${MEDIADIR}
-ONBUILD VOLUME ${STATICDIR}
-ONBUILD VOLUME ${LOGDIR}
+VOLUME ${APPDIR}
+VOLUME ${MEDIADIR}
+VOLUME ${STATICDIR}
+VOLUME ${LOGDIR}
 
 # expose supervisor-stats port
-ONBUILD EXPOSE 9001
+EXPOSE 9001
 
 # expose uwsgi-status port
-ONBUILD EXPOSE 7777
+EXPOSE 7777
 
 # expose web port
-ONBUILD EXPOSE ${PORT}
+EXPOSE ${PORT}
 
-ONBUILD CMD ${SCRIPTSDIR}/run.sh
+CMD ${SCRIPTSDIR}/run.sh
