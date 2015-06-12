@@ -6,12 +6,18 @@ MAINTAINER Dirk Moors
 
 ENV CONFDIR /tmp/conf
 
-ENV APPDIR /opt/python/app
-ENV MEDIADIR /opt/python/media
-ENV STATICDIR /opt/python/static
-ENV LOGDIR /opt/python/logs
-ENV RUNDIR /opt/python/run
-ENV SCRIPTSDIR /opt/python/scripts
+ENV HOME /opt/python
+
+ENV APPSRC ./app
+ENV CONFSRC ./conf
+ENV SCRIPTSSRC ./scripts
+
+ENV APPDIR ${HOME}/app
+ENV MEDIADIR ${HOME}/media
+ENV STATICDIR ${HOME}/static
+ENV LOGDIR ${HOME}/logs
+ENV RUNDIR ${HOME}/run
+ENV SCRIPTSDIR ${HOME}/scripts
 
 ENV SERVER_NAME example.com
 ENV PORT 8080
@@ -41,7 +47,8 @@ RUN pip install --upgrade pip && \
     pip install virtualenv
 
 # make directories
-RUN mkdir -p ${APPDIR} && \
+ONBUILD RUN \
+    mkdir -p ${APPDIR} && \
     mkdir -p ${MEDIADIR} && \
     mkdir -p ${STATICDIR} && \
     mkdir -p ${LOGDIR} && \
@@ -49,38 +56,33 @@ RUN mkdir -p ${APPDIR} && \
     mkdir -p ${RUNDIR}
 
 # make virtualenv
-RUN cd ${RUNDIR} && \
+ONBUILD RUN cd ${RUNDIR} && \
     virtualenv venv
 
 # set correct permissions
-RUN chown -R www-data ${APPDIR} && \
-    chown -R www-data ${MEDIADIR} && \
-    chown -R www-data ${STATICDIR} && \
-    chown -R www-data ${LOGDIR} && \
-    chown -R www-data ${SCRIPTSDIR} && \
-    chown -R www-data ${RUNDIR}
+ONBUILD RUN chown -R www-data ${HOME}
 
-# add files
-ADD ./app ${APPDIR}
-ADD ./conf ${CONFDIR}
-ADD ./scripts ${SCRIPTSDIR}
+# add default files
+ONBUILD ADD ${APPSRC} ${APPDIR}
+ONBUILD ADD ${CONFSRC} ${CONFDIR}
+ONBUILD ADD ${SCRIPTSSRC} ${SCRIPTSDIR}
 
 # install requirements
-RUN . ${RUNDIR}/venv/bin/activate && pip install -r ${DJANGO_REQUIREMENTS_FILE}
+ONBUILD RUN . ${RUNDIR}/venv/bin/activate && pip install -r ${DJANGO_REQUIREMENTS_FILE}
 
 # expose volumes
-VOLUME ${APPDIR}
-VOLUME ${MEDIADIR}
-VOLUME ${STATICDIR}
-VOLUME ${LOGDIR}
+ONBUILD VOLUME ${APPDIR}
+ONBUILD VOLUME ${MEDIADIR}
+ONBUILD VOLUME ${STATICDIR}
+ONBUILD VOLUME ${LOGDIR}
 
 # expose supervisor-stats port
-EXPOSE 9001
+ONBUILD EXPOSE 9001
 
 # expose uwsgi-status port
-EXPOSE 7777
+ONBUILD EXPOSE 7777
 
 # expose web port
-EXPOSE ${PORT}
+ONBUILD EXPOSE ${PORT}
 
-CMD ${SCRIPTSDIR}/run.sh
+ONBUILD CMD ${SCRIPTSDIR}/run.sh
