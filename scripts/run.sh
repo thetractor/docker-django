@@ -4,5 +4,5 @@ set -e
 # Make Configurations
 ${SCRIPTSDIR}/make_configurations.sh
 
-# Run supervisor
-supervisord
+# Run uwsgi
+/usr/local/bin/uwsgi --ini ${RUNDIR}/uwsgi.ini

@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 
 ENV CONFDIR /tmp/conf
 
-ENV ROOT /opt/python
+ENV ROOT /srv/www
 
 ENV APPSRC ./app
 ENV DEPLOYMENTSRC ./deployment
@@ -23,8 +23,9 @@ ENV LOGDIR ${ROOT}/logs
 ENV RUNDIR ${ROOT}/run
 ENV SCRIPTSDIR ${ROOT}/scripts
 
-ENV SERVER_NAME example.com
-ENV PORT 8080
+ENV PORT 8000
+ENV UWSGIPORT 3031
+ENV STATUSPORT 9191
 
 ENV DJANGO_REQUIREMENTS_FILE ${DEPLOYMENTDIR}/requirements-production.txt
 ENV DJANGO_SETTINGS_MODULE service.settings
@@ -44,9 +45,8 @@ RUN set -x \
 		zlib1g-dev \
 	' \
 	&& requiredAptPackages=' \
-	    nginx \
         sqlite3 \
-        supervisor \
+        nano \
 	' \
 	&& requiredPipPackages=' \
 	    uwsgi \
@@ -55,8 +55,6 @@ RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y $buildDeps $requiredAptPackages --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
-    && echo "daemon off;" >> /etc/nginx/nginx.conf \
-    && rm /etc/nginx/sites-enabled/default \
     && pip install $requiredPipPackages \
     && find /usr/local \
 		\( -type d -a -name test -o -name tests \) \
@@ -85,15 +83,24 @@ ONBUILD ADD ${APPSRC} ${APPDIR}
 ONBUILD ADD ${DEPLOYMENTSRC} ${DEPLOYMENTDIR}
 
 # expose supervisor-stats port
-EXPOSE 9001
+#EXPOSE 9001
+
+# expose http port
+EXPOSE ${PORT}
 
 # expose uwsgi-status port
-EXPOSE 7777
+EXPOSE ${STATUSPORT}
 
-# expose web port
-EXPOSE ${PORT}
+# expose uwsgi port
+EXPOSE ${UWSGIPORT}
+
+# expose volumes
+VOLUME ${MEDIADIR}
+VOLUME ${STATICDIR}
+VOLUME ${LOGDIR}
 
 # set workdir
 WORKDIR ${APPDIR}
 
+# set run command
 CMD ${SCRIPTSDIR}/run.sh
