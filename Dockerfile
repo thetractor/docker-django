@@ -23,6 +23,9 @@ ENV LOGDIR ${ROOT}/logs
 ENV RUNDIR ${ROOT}/run
 ENV SCRIPTSDIR ${ROOT}/scripts
 
+ENV CELERYAPP service.celery:app
+ENV CELERYWORKER_LOGLEVEL INFO
+
 ENV PORT 8000
 ENV UWSGIPORT 3031
 ENV STATUSPORT 9191
@@ -99,5 +102,8 @@ VOLUME ${LOGDIR}
 # set workdir
 WORKDIR ${APPDIR}
 
+# make symlink for run script
+RUN ln -s ${SCRIPTSDIR}/run.sh /usr/local/bin/run
+
 # set run command
-CMD ${SCRIPTSDIR}/run.sh
+CMD run app

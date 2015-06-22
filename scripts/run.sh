@@ -4,5 +4,22 @@ set -e
 # Make Configurations
 ${SCRIPTSDIR}/make_configurations.sh
 
-# Run uwsgi
-/usr/local/bin/uwsgi --ini ${RUNDIR}/uwsgi.ini
+# Run
+case "$@" in
+    app)
+        echo "Running App (uWSGI)..."
+        uwsgi \
+            --ini ${RUNDIR}/uwsgi.ini
+    ;;
+    worker)
+        echo "Running Worker (Celery)..."
+        celery worker \
+            --uid=www-data \
+            --gid=www-data \
+            --app=${CELERYAPP} \
+            --loglevel=${CELERYWORKER_LOGLEVEL}
+    ;;
+    shell)
+        exec "/bin/bash"
+    ;;
+esac
