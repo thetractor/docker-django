@@ -82,9 +82,6 @@ ADD ${SCRIPTSSRC} ${SCRIPTSDIR}
 ONBUILD ADD ${APPSRC} ${APPDIR}
 ONBUILD ADD ${DEPLOYMENTSRC} ${DEPLOYMENTDIR}
 
-# expose supervisor-stats port
-#EXPOSE 9001
-
 # expose http port
 EXPOSE ${PORT}
 
