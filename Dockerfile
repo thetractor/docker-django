@@ -19,7 +19,6 @@ ENV APPDIR ${ROOT}/app
 ENV DEPLOYMENTDIR ${ROOT}/deployment
 ENV MEDIADIR ${ROOT}/media
 ENV STATICDIR ${ROOT}/static
-ENV LOGDIR ${ROOT}/logs
 ENV RUNDIR ${ROOT}/run
 ENV SCRIPTSDIR ${ROOT}/scripts
 
@@ -71,7 +70,6 @@ RUN mkdir -p ${APPDIR} && \
     mkdir -p ${DEPLOYMENTDIR} && \
     mkdir -p ${MEDIADIR} && \
     mkdir -p ${STATICDIR} && \
-    mkdir -p ${LOGDIR} && \
     mkdir -p ${SCRIPTSDIR} && \
     mkdir -p ${RUNDIR}
 
@@ -98,7 +96,6 @@ EXPOSE ${UWSGIPORT}
 # expose volumes
 VOLUME ${MEDIADIR}
 VOLUME ${STATICDIR}
-VOLUME ${LOGDIR}
 
 # set workdir
 WORKDIR ${APPDIR}
