@@ -1,15 +1,14 @@
 #!/bin/bash
 set -e
 
-# Make Configurations
-${SCRIPTSDIR}/make_configurations.sh
+# Include configuration bootstrap scripts
+source "${SCRIPTSDIR}/make_configurations.sh"
 
 # Run
 case "$@" in
-    app)
-        echo "Running App (uWSGI)..."
-        uwsgi \
-            --ini ${RUNDIR}/uwsgi.ini
+    dev)
+        echo "Running Development Server..."
+        python manage.py runserver 0.0.0.0:${PORT}
     ;;
     worker)
         echo "Running Worker (Celery)..."
@@ -20,6 +19,12 @@ case "$@" in
             --loglevel=${CELERYWORKER_LOGLEVEL}
     ;;
     shell)
-        exec "/bin/bash"
+        /bin/bash
+    ;;
+    *)
+        echo "Running App (uWSGI)..."
+        make_uwsgi_config
+        uwsgi \
+            --ini ${RUNDIR}/uwsgi.ini
     ;;
 esac

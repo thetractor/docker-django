@@ -104,4 +104,4 @@ WORKDIR ${APPDIR}
 RUN ln -s ${SCRIPTSDIR}/run.sh /usr/local/bin/run
 
 # set run command
-CMD run app
+CMD run
