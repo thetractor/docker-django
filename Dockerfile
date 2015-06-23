@@ -58,6 +58,7 @@ RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y $buildDeps $requiredAptPackages --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
+    && pip install --upgrade pip \
     && pip install $requiredPipPackages \
     && find /usr/local \
 		\( -type d -a -name test -o -name tests \) \
