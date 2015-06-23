@@ -8,6 +8,7 @@ source "${SCRIPTSDIR}/make_configurations.sh"
 case "$@" in
     dev)
         echo "Running Development Server..."
+        export DJDEBUG=1
         python manage.py runserver 0.0.0.0:${PORT}
     ;;
     worker)
