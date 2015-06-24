@@ -22,6 +22,10 @@ case "$@" in
     shell)
         /bin/bash
     ;;
+    test)
+        echo "Running Django Tests..."
+        python manage.py test
+    ;;
     *)
         echo "Running App (uWSGI)..."
         make_uwsgi_config
