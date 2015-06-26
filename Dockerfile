@@ -39,6 +39,7 @@ RUN set -x \
 		gcc \
 		libbz2-dev \
 		libc6-dev \
+		libpcre3-dev \
 		libncurses-dev \
 		libsqlite3-dev \
 		libssl-dev \
@@ -47,6 +48,7 @@ RUN set -x \
 		zlib1g-dev \
 	' \
 	&& requiredAptPackages=' \
+		libpcre3 \
         sqlite3 \
         nano \
 	' \
