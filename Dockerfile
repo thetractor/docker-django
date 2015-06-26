@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 
 ENV CONFDIR /tmp/conf
 
-ENV ROOT /srv/www
+ENV ROOT /data
 
 ENV APPSRC ./app
 ENV DEPLOYMENTSRC ./deployment
@@ -92,10 +92,6 @@ EXPOSE ${STATUSPORT}
 
 # expose uwsgi port
 EXPOSE ${UWSGIPORT}
-
-# expose volumes
-VOLUME ${MEDIADIR}
-VOLUME ${STATICDIR}
 
 # set workdir
 WORKDIR ${APPDIR}
