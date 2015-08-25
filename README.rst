@@ -1,11 +1,14 @@
-====================================
-Docker Django Web Stack (Python 3.4) 
-====================================
+=======================
+Docker Django Web Stack
+=======================
 
 | |quayio|
 
-.. |quayio| image:: https://quay.io/repository/vikingco/docker-django-python34/status?token=3f08e4c5-35c7-4f70-ac78-9be6060af12a
+.. |quayio| image:: https://quay.io/repository/vikingco/django/status?token=fe5fabd9-5e9a-4250-a6be-c7e120f72e7c
     :alt: QuayIO Container Status
-    :target: https://quay.io/repository/vikingco/docker-django-python34
+    :target: https://quay.io/repository/vikingco/django
     
 Base image for creating a Docker image running Django in a uWSGI container
+
+This builds multiple versions of the image that are tagged based on the Django
+and Python version used.

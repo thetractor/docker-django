@@ -63,4 +63,5 @@ target/
 # PyCharm
 .idea/
 
-
+# Vim
+*.swp
