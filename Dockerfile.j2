@@ -10,16 +10,10 @@ RUN set -x \
 		libsqlite3-dev \
 		make \
 		xz-utils \
+        gcc \
 	' \
 	&& requiredAptPackages=' \
-        sqlite3 \
-        mysql-client \
-        libmysqlclient-dev \
-        postgresql-client \
-        libpq-dev \
-        python-dev \
         git \
-        gcc \
 	' \
 	&& requiredPipPackages=' \
         uwsgi \
@@ -38,8 +32,6 @@ RUN set -x \
 		-exec rm -rf '{}' + \
 	&& apt-get purge -y --auto-remove $buildDeps
 
-RUN pip install Django=={{ djangoversion }}
-
 # Define env variables
 ENV ROOT=/data
 ENV PYTHONUNBUFFERED=1 \
@@ -54,7 +46,11 @@ ENV PYTHONUNBUFFERED=1 \
     SCRIPTSDIR=${ROOT}/scripts \
     PORT=8000 \
     UWSGIPORT=3031 \
-    STATUSPORT=9191
+    STATUSPORT=9191 \
+    MANAGEFILE=manage.py \
+    WSGIFILE=wsgi.py \
+    PIPSRC=/pip
+ENV PYTHONPATH $PIPSRC:$SRCDIR:$PYTHONPATH
 
 # make directories
 RUN mkdir -p ${SRCDIR} && \
@@ -70,9 +66,7 @@ RUN chown -R www-data ${ROOT}
 COPY ${CONFSRC} ${CONFDIR}
 COPY ${SCRIPTSSRC} ${SCRIPTSDIR}
 
-ONBUILD COPY deployment ${DEPLOYMENTDIR}
-ONBUILD RUN pip install --no-cache-dir -r ${DEPLOYMENTDIR}/requirements.txt
-ONBUILD COPY . ${SRCDIR}
+RUN ln -s ${CONFDIR}/pip.conf /etc/pip.conf
 
 # expose http port
 EXPOSE ${PORT}
