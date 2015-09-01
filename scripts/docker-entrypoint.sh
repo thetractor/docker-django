@@ -35,7 +35,7 @@ if [ -z $MANAGEFILE ]; then
 fi
 
 # Run
-case "$@" in
+case "$1" in
     dev)
         echo "Running Development Server..."
         export DJDEBUG=1
@@ -50,7 +50,7 @@ case "$@" in
             --loglevel=${CELERYWORKER_LOGLEVEL}
     ;;
     bash)
-        /bin/bash
+        /bin/bash "${@:2}"
     ;;
     test)
         echo "Running Django Tests..."
@@ -69,7 +69,7 @@ case "$@" in
             --ini ${RUNDIR}/uwsgi.ini
     ;;
     python)
-        ptipython
+        ptipython "${@:2}"
     ;;
     *)
         show_help
