@@ -22,6 +22,13 @@ This will give you `python`, `pip` `ipython`, `ptpython`, `git` and `uwsgi`.
 Everything else you will need to install yourself by adding extra `RUN`
 commands to your project's Dockerfile.
 
+You will probably still need the following lines
+
+    COPY deployment/requirements.txt ${DEPLOYMENTDIR}/requirements.txt
+    RUN pip install -r ${DEPLOYMENTDIR}/requirements.txt
+    COPY . ${SRCDIR}
+
+
 ### docker-entrypoint.sh
 
 This is the main entrypoint of the image. It is built to comply with the [best
