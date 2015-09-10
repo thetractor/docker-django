@@ -19,7 +19,8 @@ dev     : Start a normal Django development server. Provide the 'APPDIR' env
 worker  : Start a celery worker. Requires the env variables 'CELERYAPP' and
           'CELERYWORKER_LOGLEVEL'
 bash    : Start a bash shell
-test    : Run the python tests. Requires 'APPDIR' and 'MANAGEFILE'
+test    : Run the Django tests. Requires 'APPDIR' and 'MANAGEFILE'
+tox     : Run the Tox tests. Requires 'TOXFILEDIR' and tox to be installed
 shell   : Start a Django Python shell. Requires 'APPDIR' and 'MANAGEFILE'
 uwsgi   : Run uwsgi server. Requires the env variables 'APPDIR', 'WSGIFILE',
           'DJANGO_SETTINGS_MODULE'. Optional env variables are 'PORT',
@@ -55,6 +56,11 @@ case "$1" in
     test)
         echo "Running Django Tests..."
         python ${APPDIR}/${MANAGEFILE} test
+    ;;
+    tox)
+        echo "Running Tox Tests..."
+        cd ${TOXFILEDIR} \
+            && tox "${@:2}"
     ;;
     shell)
         python ${APPDIR}/${MANAGEFILE} shell
