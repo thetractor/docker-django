@@ -12,22 +12,23 @@ Usage: docker run <imagename> COMMAND
 
 Commands
 
-dev     : Start a normal Django development server. Provide the 'APPDIR' env
-          which specifies the name of the dir that contains the manage.py file.
-          Provide 'MANAGEFILE' to be the name of the manage.py file.
-          Optionally provide the 'PORT' env
-          variable to determine the port on which it listens.
-worker  : Start a celery worker. Requires the env variables 'CELERYAPP' and
-          'CELERYWORKER_LOGLEVEL'
-bash    : Start a bash shell
-test    : Run the Django tests. Requires 'APPDIR' and 'MANAGEFILE'
-tox     : Run the Tox tests. Requires 'TOXFILEDIR' and tox to be installed
-shell   : Start a Django Python shell. Requires 'APPDIR' and 'MANAGEFILE'
-uwsgi   : Run uwsgi server. Requires the env variables 'APPDIR', 'WSGIFILE',
-          'DJANGO_SETTINGS_MODULE'. Optional env variables are 'PORT',
-          'UWSGIPORT' and 'STATUSPORT'.
-python  : Run a Python shell
-help    : Show this message
+dev      : Start a normal Django development server. Provide the 'APPDIR' env
+           which specifies the name of the dir that contains the manage.py file.
+           Provide 'MANAGEFILE' to be the name of the manage.py file.
+           Optionally provide the 'PORT' env
+           variable to determine the port on which it listens.
+worker   : Start a celery worker. Requires the env variables 'CELERYAPP' and
+           'CELERYWORKER_LOGLEVEL'
+bash     : Start a bash shell
+test     : Run the Django tests. Requires 'APPDIR' and 'MANAGEFILE'
+tox      : Run the Tox tests. Requires 'TOXFILEDIR' and tox to be installed
+shell    : Start a Django Python shell. Requires 'APPDIR' and 'MANAGEFILE'
+uwsgi    : Run uwsgi server. Requires the env variables 'APPDIR', 'WSGIFILE',
+           'DJANGO_SETTINGS_MODULE'. Optional env variables are 'PORT',
+           'UWSGIPORT' and 'STATUSPORT'.
+python   : Run a classic python shell
+ptpython : Run a ptpython shell
+help     : Show this message
 """
 }
 
@@ -56,6 +57,9 @@ case "$1" in
     ;;
     python)
         run_python "${@:2}"
+    ;;
+    ptpython)
+        run_ptpython "${@:2}"
     ;;
     help)
         show_help
