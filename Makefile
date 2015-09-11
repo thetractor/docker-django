@@ -11,7 +11,7 @@ build: build-python2.7 build-python3.4
 build-%: PYTHON_VERSION=$(python_version)
 build-%:
 	@echo "\
-pythonversion: $(PYTHON_VERSION)-slim\n\
+pythonversion: $(PYTHON_VERSION)\n\
 " > data$(PYTHON_VERSION).yml
 	docker run \
 		-v $(ROOTDIR)/Dockerfile.j2:/data/Dockerfile.j2 \
