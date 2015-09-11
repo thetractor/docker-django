@@ -40,7 +40,7 @@ Starts a Django development server.
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
+APPDIR | No | Directory where the `manage.py` file is if not the root directory
 DJANGO_SETTINGS_MODULE | Yes | Name of the settings module
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 PORT | No | Provide the port on which the Django server should listen. Defaults to 8000
@@ -61,7 +61,7 @@ Runs the standard Django tests
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
+APPDIR | No | Directory where the `manage.py` file is if not the root directory
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 
 #### tox
@@ -94,7 +94,7 @@ Run a Django Python shell
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
+APPDIR | No | Directory where the `manage.py` file is if not the root directory
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 
 #### uwsgi
@@ -102,7 +102,7 @@ Run the app using uWSGI
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
+APPDIR | No | Directory where the `manage.py` file is if not the root directory
 WSGIFILE | Yes | Provide name of `wsgi.py` relative to the root src directory
 DJANGO_SETTINGS_MODULE | Yes | Name of the settings module
 PORT | No | Port on which uWSGI will listen for HTTP connections. Defaults to 8000

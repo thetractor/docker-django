@@ -34,6 +34,7 @@ RUN set -x \
 ENV MEDIADIR=${ROOT}/media \
     STATICDIR=${ROOT}/static \
     RUNDIR=${ROOT}/run \
+    APPDIR=${ROOT}/src \
     PORT=8000 \
     UWSGIPORT=3031 \
     STATUSPORT=9191 \
@@ -60,7 +61,7 @@ EXPOSE ${STATUSPORT}
 EXPOSE ${UWSGIPORT}
 
 # set workdir
-WORKDIR ${SRCDIR}
+WORKDIR ${APPDIR}
 
 # make symlink for run script
 RUN ln -s -f ${SCRIPTSDIR}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
