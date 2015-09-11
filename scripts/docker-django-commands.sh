@@ -3,6 +3,11 @@
 # Include configuration bootstrap scripts
 source "${SCRIPTSDIR}/make_configurations.sh"
 
+# Define manage.py name
+if [ -z $MANAGEFILE ]; then
+    export MANAGEFILE=manage.py
+fi
+
 run_dev(){
     echo "Running Development Server..."
     export DJDEBUG=1

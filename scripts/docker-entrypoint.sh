@@ -31,11 +31,6 @@ help    : Show this message
 """
 }
 
-# Define manage.py name
-if [ -z $MANAGEFILE ]; then
-    export MANAGEFILE=manage.py
-fi
-
 # Run
 case "$1" in
     dev)
