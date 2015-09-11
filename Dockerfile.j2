@@ -38,7 +38,7 @@ ENV PYTHONUNBUFFERED=1 \
     CONFSRC=./conf \
     CONFDIR=${ROOT}/conf \
     SRCDIR=${ROOT}/src \
-    TOXFILEDIR=${SRCDIR} \
+    TOXFILEDIR=${ROOT}/src \
     DEPLOYMENTDIR=${ROOT}/deployment \
     MEDIADIR=${ROOT}/media \
     STATICDIR=${ROOT}/static \
@@ -50,6 +50,8 @@ ENV PYTHONUNBUFFERED=1 \
     STATUSPORT=9191 \
     MANAGEFILE=manage.py \
     WSGIFILE=wsgi.py \
+    BUILDDEPSFILE=builddeps.txt \
+    DEPSFILE=deps.txt \
     PIPSRC=/pip
 ENV PYTHONPATH $PIPSRC:$SRCDIR:$PYTHONPATH
 
