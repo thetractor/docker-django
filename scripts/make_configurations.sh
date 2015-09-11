@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 readonly UWSGI_CONF_TEMPLATE="${CONFDIR}/uwsgi.template.ini"
 readonly UWSGI_CONF="${RUNDIR}/uwsgi.ini"

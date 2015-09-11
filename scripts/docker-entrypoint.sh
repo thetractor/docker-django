@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -e
 
 # Include
@@ -34,28 +34,28 @@ help    : Show this message
 # Run
 case "$1" in
     dev)
-        run_dev
+        run_dev "${@:2}"
     ;;
     worker)
-        run_worker
+        run_worker "${@:2}"
     ;;
     bash)
-        run_bash
+        run_bash "${@:2}"
     ;;
     test)
-        run_django_tests
+        run_django_tests "${@:2}"
     ;;
     tox)
-        run_tox
+        run_tox "${@:2}"
     ;;
     shell)
-        run_django_shell
+        run_django_shell "${@:2}"
     ;;
     uwsgi)
-        run_uwsgi
+        run_uwsgi "${@:2}"
     ;;
     python)
-        run_python
+        run_python "${@:2}"
     ;;
     help)
         show_help
