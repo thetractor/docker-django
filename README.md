@@ -57,12 +57,37 @@ CELERYWORKER_LOGLEVEL | Yes | The loglevel of Celery workers
 Starts a bash shell
 
 #### test
-Runs the stand Django tests
+Runs the standard Django tests
 
 Env variable | Required | Description
 --- | --- | ---
 APPDIR | Yes | Specify name of root src directory
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
+
+#### tox
+Runs tox tests
+
+Env variable | Required | Description
+--- | --- | ---
+TOXFILEDIR | No | Specify name of directory where the `tox.ini` file exists if it differs from `./`
+
+##### advanced topics
+
+*   build dependencies:
+
+    Since running tox will create new virtual environments, in most cases it is required to have additional system
+    packages available. A straightforward example would be `libpg-dev` which is required if you are installing psycopg2.
+
+    Those 'build dependencies' can be provided via the `builddeps.txt` file, that can be added in the `deployment`
+    directory.
+
+    **WARNING: These build dependencies will be installed before running tox, and uninstalled afterwards. Make sure that
+    your application does not depend on these build dependencies directly!**
+
+    Env variable | Required | Description
+    --- | --- | ---
+    BUILDDEPSFILE | No | Provide name of `builddeps.txt` if it differs from `builddeps.txt`
+
 
 #### shell
 Run a Django Python shell
