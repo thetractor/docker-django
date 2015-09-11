@@ -1,4 +1,4 @@
-FROM python:{{ pythonversion }}
+FROM vikingco/python:{{ pythonversion }}
 MAINTAINER technology@vikingco.com
 
 # install and configure packages
@@ -18,8 +18,6 @@ RUN set -x \
 	&& requiredPipPackages=' \
         uwsgi \
         Jinja2 \
-        ipython \
-        ptpython \
 	' \
 	&& apt-get update \
 	&& apt-get install -y $requiredAptPackages $buildDeps \
@@ -33,43 +31,24 @@ RUN set -x \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 # Define env variables
-ENV ROOT=/data
-ENV PYTHONUNBUFFERED=1 \
-    CONFSRC=./conf \
-    CONFDIR=${ROOT}/conf \
-    SRCDIR=${ROOT}/src \
-    TOXFILEDIR=${ROOT}/src \
-    DEPLOYMENTDIR=${ROOT}/deployment \
-    MEDIADIR=${ROOT}/media \
+ENV MEDIADIR=${ROOT}/media \
     STATICDIR=${ROOT}/static \
     RUNDIR=${ROOT}/run \
-    SCRIPTSSRC=./scripts \
-    SCRIPTSDIR=${ROOT}/scripts \
     PORT=8000 \
     UWSGIPORT=3031 \
     STATUSPORT=9191 \
     MANAGEFILE=manage.py \
-    WSGIFILE=wsgi.py \
-    BUILDDEPSFILE=builddeps.txt \
-    DEPSFILE=deps.txt \
-    PIPSRC=/pip
-ENV PYTHONPATH $PIPSRC:$SRCDIR:$PYTHONPATH
+    WSGIFILE=wsgi.py
 
 # make directories
-RUN mkdir -p ${SRCDIR} && \
-    mkdir -p ${DEPLOYMENTDIR} && \
-    mkdir -p ${MEDIADIR} && \
+RUN mkdir -p ${MEDIADIR} && \
     mkdir -p ${STATICDIR} && \
-    mkdir -p ${SCRIPTSDIR} && \
-    mkdir -p ${RUNDIR} && \
-    mkdir -p /root/.ptpython
+    mkdir -p ${RUNDIR}
 
 RUN chown -R www-data ${ROOT}
 
 COPY ${CONFSRC} ${CONFDIR}
 COPY ${SCRIPTSSRC} ${SCRIPTSDIR}
-
-RUN ln -s ${CONFDIR}/pip.conf /etc/pip.conf
 
 # expose http port
 EXPOSE ${PORT}
@@ -84,7 +63,7 @@ EXPOSE ${UWSGIPORT}
 WORKDIR ${SRCDIR}
 
 # make symlink for run script
-RUN ln -s ${SCRIPTSDIR}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN ln -s -f ${SCRIPTSDIR}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
 # set run command
 ENTRYPOINT ["docker-entrypoint.sh"]
