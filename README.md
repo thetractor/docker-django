@@ -28,6 +28,12 @@ You will probably still need the following lines
     RUN pip install -r ${DEPLOYMENTDIR}/requirements.txt
     COPY . ${SRCDIR}
 
+**Important: If you update your 'DJANGOROOT' env variable, don't forget to update your WORKDIR to ${DJANGOROOT} as well:**
+
+    ENV DJANGOROOT ${SRCDIR}/my_django_root
+    ...
+    WORKDIR ${DJANGOROOT}
+
 
 ### docker-entrypoint.sh
 
@@ -40,7 +46,6 @@ Starts a Django development server.
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
 DJANGO_SETTINGS_MODULE | Yes | Name of the settings module
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 PORT | No | Provide the port on which the Django server should listen. Defaults to 8000
@@ -61,7 +66,6 @@ Runs the standard Django tests
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 
 #### tox
@@ -94,7 +98,6 @@ Run a Django Python shell
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
 MANAGEFILE | No | Provide name of `manage.py` if it differs from `manage.py`
 
 #### uwsgi
@@ -102,8 +105,8 @@ Run the app using uWSGI
 
 Env variable | Required | Description
 --- | --- | ---
-APPDIR | Yes | Specify name of root src directory
-WSGIFILE | Yes | Provide name of `wsgi.py` relative to the root src directory
+DJANGOROOT | No | Directory where the `manage.py` file is if not the root directory. Defaults to `<ROOT>`
+WSGIFILE | No | Provide name of `wsgi.py` relative to the root django app directory. Defaults to `wsgi.py`
 DJANGO_SETTINGS_MODULE | Yes | Name of the settings module
 PORT | No | Port on which uWSGI will listen for HTTP connections. Defaults to 8000
 UWSGIPORT | No | Port on which uWSGI server will listen (use together with Nginx). Defaults to 3031

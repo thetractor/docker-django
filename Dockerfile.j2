@@ -38,6 +38,7 @@ ENV MEDIADIR=${ROOT}/media \
     UWSGIPORT=3031 \
     STATUSPORT=9191 \
     MANAGEFILE=manage.py \
+    DJANGOROOT=${SRCDIR} \
     WSGIFILE=wsgi.py
 
 # make directories
@@ -58,9 +59,6 @@ EXPOSE ${STATUSPORT}
 
 # expose uwsgi port
 EXPOSE ${UWSGIPORT}
-
-# set workdir
-WORKDIR ${SRCDIR}
 
 # make symlink for run script
 RUN ln -s -f ${SCRIPTSDIR}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

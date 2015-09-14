@@ -11,7 +11,7 @@ fi
 run_dev(){
     echo "Running Development Server..."
     export DJDEBUG=1
-    python ${APPDIR}/${MANAGEFILE} runserver 0.0.0.0:${PORT}
+    python ${MANAGEFILE} runserver 0.0.0.0:${PORT}
 }
 
 run_worker(){
@@ -25,11 +25,11 @@ run_worker(){
 
 run_django_tests(){
     echo "Running Django Tests..."
-    python ${APPDIR}/${MANAGEFILE} test
+    python ${MANAGEFILE} test
 }
 
 run_django_shell(){
-    python ${APPDIR}/${MANAGEFILE} shell
+    python ${MANAGEFILE} shell
 }
 
 run_uwsgi(){
