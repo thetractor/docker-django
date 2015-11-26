@@ -1,68 +1,66 @@
 FROM vikingco/python:{{ pythonversion }}
 MAINTAINER technology@vikingco.com
 
-# install and configure packages
+#############################
+# Set environment variables #
+#############################
+ENV CONF_SRC=./conf \
+    CONF_DIR=${ROOT}/conf \
+    MEDIA_DIR=${ROOT}/media \
+    STATIC_DIR=${ROOT}/static \
+    RUN_DIR=${ROOT}/run \
+    MANAGE_FILE=manage.py \
+    DJANGO_ROOT=${SRC_DIR} \
+    WSGI_FILE=wsgi.py \
+    PYTHON_PATH=${SRC_DIR}:${PYENV_ROOT}/versions/${PYENV_VERSION}/bin
+
+########################
+# Configure build args #
+########################
+ARG PORT=8000
+ARG UWSGI_PORT=3031
+ARG STATUS_PORT=9191
+
+##############################
+# Copy deployment into image #
+##############################
+COPY ${DEPLOYMENT_SRC} ${DEPLOYMENT_DIR}
+
+#####################################
+# Install packages and requirements #
+#####################################
 RUN set -x \
-	&& buildDeps=' \
-		curl \
-		libbz2-dev \
-		libncurses-dev \
-		libsqlite3-dev \
-		make \
-		xz-utils \
-        gcc \
-	' \
-	&& requiredAptPackages=' \
-        git \
-	' \
-	&& requiredPipPackages=' \
-        uwsgi \
-        Jinja2 \
-	' \
-	&& apt-get update \
-	&& apt-get install -y $requiredAptPackages $buildDeps \
-    && rm -rf /var/lib/apt/lists/* \
-    && pip install --upgrade pip \
-    && pip install $requiredPipPackages \
+    && buildPackages=`cat ${DEPLOYMENT_DIR}/${REQUIRED_BUILD_PACKAGES_FILE}` \
+    && runtimePackages=`cat ${DEPLOYMENT_DIR}/${REQUIRED_RUNTIME_PACKAGES_FILE}` \
+    && sudo yum install -y ${runtimePackages} ${buildPackages} \
+    && pip install -r ${DEPLOYMENT_DIR}/${PYTHON_REQUIREMENTS_FILE} \
     && find /usr/local \
 		\( -type d -a -name test -o -name tests \) \
 		-o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
 		-exec rm -rf '{}' + \
-	&& apt-get purge -y --auto-remove $buildDeps
+    && sudo rm -rf /tmp/* \
+    && sudo yum remove -y ${buildPackages} \
+    && sudo yum clean all
 
-# Define env variables
-ENV MEDIADIR=${ROOT}/media \
-    STATICDIR=${ROOT}/static \
-    RUNDIR=${ROOT}/run \
-    PORT=8000 \
-    UWSGIPORT=3031 \
-    STATUSPORT=9191 \
-    MANAGEFILE=manage.py \
-    DJANGOROOT=${SRCDIR} \
-    WSGIFILE=wsgi.py
+####################
+# Make directories #
+####################
+RUN mkdir -p ${MEDIA_DIR} && \
+    mkdir -p ${STATIC_DIR} && \
+    mkdir -p ${RUN_DIR}
 
-# make directories
-RUN mkdir -p ${MEDIADIR} && \
-    mkdir -p ${STATICDIR} && \
-    mkdir -p ${RUNDIR}
+#################
+# Copy in files #
+#################
+COPY ${CONF_SRC} ${CONF_DIR}
+COPY ${SCRIPTS_SRC} ${SCRIPTS_DIR}
 
-RUN chown -R www-data ${ROOT}
+################
+# Expose ports #
+################
+EXPOSE ${PORT} ${STATUS_PORT} ${UWSGI_PORT}
 
-COPY ${CONFSRC} ${CONFDIR}
-COPY ${SCRIPTSSRC} ${SCRIPTSDIR}
-
-# expose http port
-EXPOSE ${PORT}
-
-# expose uwsgi-status port
-EXPOSE ${STATUSPORT}
-
-# expose uwsgi port
-EXPOSE ${UWSGIPORT}
-
-# make symlink for run script
-RUN ln -s -f ${SCRIPTSDIR}/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-
-# set run command
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["help"]
+###############
+# Set workdir #
+###############
+WORKDIR ${DJANGO_ROOT}

@@ -1,22 +1,22 @@
 ROOTDIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-python_version = $(shell echo $@ | sed "s/[^-]*-python\(.*\)/\1/")
+python_version = $(shell echo $@ | sed "s/[^-]*-python-\(.*\)/\1/")
 
 all: build push
 
-push: push-python2.7 push-python3.4
+push: push-python-pypy-2.4.0 push-python-2.7.5 push-python-2.7.10 push-python-3.4.3
 
-build: build-python2.7 build-python3.4
+build: build-python-pypy-2.4.0 build-python-2.7.5 build-python-2.7.10 build-python-3.4.3
 
 build-%: PYTHON_VERSION=$(python_version)
 build-%:
 	@echo "\
-pythonversion: $(PYTHON_VERSION)\n\
+pythonversion: $(PYTHON_VERSION)\
 " > data$(PYTHON_VERSION).yml
-	docker run \
+	docker run --rm \
 		-v $(ROOTDIR)/Dockerfile.j2:/data/Dockerfile.j2 \
 		-v $(ROOTDIR)/data$(PYTHON_VERSION).yml:/data/data.yml \
-		sgillis/jinja2cli Dockerfile.j2 data.yml > Dockerfile
+		vikingco/jinja2cli Dockerfile.j2 data.yml > Dockerfile
 	docker build -t vikingco/django:$(PYTHON_VERSION) .
 	@rm data$(PYTHON_VERSION).yml
 	@rm Dockerfile
