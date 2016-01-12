@@ -4,7 +4,8 @@ MAINTAINER technology@vikingco.com
 #############################
 # Set environment variables #
 #############################
-ENV CONF_SRC=./conf \
+ENV PYENV_VERSION={{ pythonversion }} \
+    CONF_SRC=./conf \
     CONF_DIR=${ROOT}/conf \
     MEDIA_DIR=${ROOT}/media \
     STATIC_DIR=${ROOT}/static \
@@ -12,7 +13,7 @@ ENV CONF_SRC=./conf \
     MANAGE_FILE=manage.py \
     DJANGO_ROOT=${SRC_DIR} \
     WSGI_FILE=wsgi.py \
-    PYTHON_PATH=${SRC_DIR}:${PYENV_ROOT}/versions/${PYENV_VERSION}/bin
+    PYTHON_PATH=${SRC_DIR}:${PYENV_ROOT}/versions/{{ pythonversion }}/bin
 
 ########################
 # Configure build args #
