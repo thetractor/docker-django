@@ -35,7 +35,7 @@ RUN set -x \
     && runtimePackages=`cat ${DEPLOYMENT_DIR}/${REQUIRED_RUNTIME_PACKAGES_FILE}` \
     && sudo yum install -y ${runtimePackages} ${buildPackages} \
     && pip install -r ${DEPLOYMENT_DIR}/${PYTHON_REQUIREMENTS_FILE} \
-    && find /usr/local \
+    && find ${PYENV_ROOT} \
 		\( -type d -a -name test -o -name tests \) \
 		-o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
 		-exec rm -rf '{}' + \
