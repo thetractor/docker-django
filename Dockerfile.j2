@@ -33,15 +33,15 @@ COPY ${DEPLOYMENT_SRC} ${DEPLOYMENT_DIR}
 RUN set -x \
     && buildPackages=`cat ${DEPLOYMENT_DIR}/${REQUIRED_BUILD_PACKAGES_FILE}` \
     && runtimePackages=`cat ${DEPLOYMENT_DIR}/${REQUIRED_RUNTIME_PACKAGES_FILE}` \
-    && sudo yum install -y ${runtimePackages} ${buildPackages} \
+    && yum install -y ${runtimePackages} ${buildPackages} \
     && pip install -r ${DEPLOYMENT_DIR}/${PYTHON_REQUIREMENTS_FILE} \
     && find ${PYENV_ROOT} \
 		\( -type d -a -name test -o -name tests \) \
 		-o \( -type f -a -name '*.pyc' -o -name '*.pyo' \) \
 		-exec rm -rf '{}' + \
-    && sudo rm -rf /tmp/* \
-    && sudo yum remove -y ${buildPackages} \
-    && sudo yum clean all
+    && rm -rf /tmp/* \
+    && yum remove -y ${buildPackages} \
+    && yum clean all
 
 ####################
 # Make directories #
