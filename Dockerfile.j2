@@ -21,6 +21,9 @@ ENV PYENV_VERSION={{ pythonversion }} \
 ARG PORT=8000
 ARG UWSGI_PORT=3031
 ARG STATUS_PORT=9191
+ENV PORT=${PORT} \
+    UWSGI_PORT=${UWSGI_PORT} \
+    STATUS_PORT=${STATUS_PORT}
 
 ##############################
 # Copy deployment into image #
