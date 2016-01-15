@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python ${MANAGEFILE} shell
+python ${MANAGE_FILE} shell
