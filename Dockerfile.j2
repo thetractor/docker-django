@@ -7,9 +7,9 @@ MAINTAINER technology@vikingco.com
 ENV PYENV_VERSION={{ pythonversion }} \
     CONF_SRC=./conf \
     CONF_DIR=${ROOT}/conf \
-    MEDIA_DIR=${ROOT}/media \
-    STATIC_DIR=${ROOT}/static \
     RUN_DIR=${ROOT}/run \
+    MEDIA_ROOT=${ROOT}/media \
+    STATIC_ROOT=${ROOT}/static \
     MANAGE_FILE=manage.py \
     DJANGO_ROOT=${SRC_DIR} \
     WSGI_FILE=wsgi.py \
@@ -49,8 +49,8 @@ RUN set -x \
 ####################
 # Make directories #
 ####################
-RUN mkdir -p ${MEDIA_DIR} && \
-    mkdir -p ${STATIC_DIR} && \
+RUN mkdir -p ${MEDIA_ROOT} && \
+    mkdir -p ${STATIC_ROOT} && \
     mkdir -p ${RUN_DIR}
 
 #################
