@@ -5,8 +5,8 @@ if [ -z "${CELERY_APP}" ]; then
 else
     echo "Running Worker (Celery)..."
     celery worker \
-        --uid=www-data \
-        --gid=www-data \
+        --uid=${USERNAME} \
+        --gid=${GROUPNAME} \
         --app=${CELERY_APP} \
         --loglevel=${CELERY_WORKER_LOGLEVEL:-INFO}
 fi
