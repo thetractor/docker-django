@@ -22,7 +22,7 @@ if [ -f ${DJANGO_ROOT}/${WSGI_FILE} ];
 then
     echo "Running App (uWSGI)..."
     make_uwsgi_config
-    uwsgi --ini ${UWSGI_CONF}
+    uwsgi --ini ${UWSGI_CONF} "$@"
 else
     echo "Cannot start uwsgi: missing ${DJANGO_ROOT}/${WSGI_FILE}"
 fi
